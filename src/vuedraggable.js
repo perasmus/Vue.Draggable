@@ -104,7 +104,16 @@ function getComponentAttributes($attrs, componentData) {
 }
 
 const eventsListened = ["Start", "Add", "Remove", "Update", "End"];
-const eventsToEmit = ["Choose", "Unchoose", "Sort", "Filter", "Clone", "Select", "Deselect"];
+const eventsToEmit = [
+  "Choose",
+  "Unchoose",
+  "Sort",
+  "Filter",
+  "Clone",
+  "Select",
+  "Deselect"
+];
+
 const readonlyProperties = ["Move", ...eventsListened, ...eventsToEmit].map(
   evt => "on" + evt
 );
@@ -504,7 +513,11 @@ const draggableComponent = {
         insertNodeAt(this.rootContainer, item, evt.oldIndicies[index].index);
       });
       if (evt.pullMode === "clone") {
-        removeNode(evt.clone);
+        if (evt.clones) {
+          evt.clones.forEach(removeNode);
+        } else {
+          removeNode(evt.clone);
+        }
         return;
       }
       const reversed = this.context.sort((a, b) => b.index - a.index);
